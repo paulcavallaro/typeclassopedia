@@ -1,5 +1,7 @@
 module MonadExercises where
 
+import Control.Monad (join)
+
 {-
 
 instance Monad Maybe where
@@ -26,3 +28,6 @@ data Free f a = Var a
 instance (Functor f) => Functor (Free f) where
   fmap g (Var x) = Var $ g x
   fmap g (Node x) = Node (fmap (fmap g) x)
+
+(>>>=) :: (Monad m, Functor m) => m a -> (a -> m b) -> m b
+(>>>=) x g = join $ fmap g x
