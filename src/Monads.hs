@@ -43,3 +43,16 @@ ap' :: (Monad m) => m (a -> b) -> m a -> m b
 ap' g x = g >>= (\y ->
                   x >>= (\z ->
                           return (y z)))
+
+sequence' :: Monad m => [m a] -> m [a]
+sequence' (x:xs) = x >>= (\y ->
+                           sequence' xs >>= (\z ->
+                                              return $ y : z))
+sequence' [] = return []
+
+sequence'' :: Monad m => [m a] -> m [a]
+sequence'' = foldr mcons (return [])
+  where
+    mcons p q = p >>= (\x ->
+                        q >>= (\y ->
+                                return $ x : y))
