@@ -38,3 +38,8 @@ join' x = x >>= id
 fmap' :: (Monad m) => (a -> b) -> m a -> m b
 fmap' g x = x >>= (\y ->
                     return (g y))
+
+ap' :: (Monad m) => m (a -> b) -> m a -> m b
+ap' g x = g >>= (\y ->
+                  x >>= (\z ->
+                          return (y z)))
