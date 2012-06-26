@@ -31,3 +31,10 @@ instance (Functor f) => Functor (Free f) where
 
 (>>>=) :: (Monad m, Functor m) => m a -> (a -> m b) -> m b
 (>>>=) x g = join $ fmap g x
+
+join' :: (Monad m) => m (m a) -> m a
+join' x = x >>= id
+
+fmap' :: (Monad m) => (a -> b) -> m a -> m b
+fmap' g x = x >>= (\y ->
+                    return (g y))
