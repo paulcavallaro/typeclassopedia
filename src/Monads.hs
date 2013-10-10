@@ -56,3 +56,20 @@ sequence'' = foldr mcons (return [])
     mcons p q = p >>= (\x ->
                         q >>= (\y ->
                                 return $ x : y))
+
+class Monad m where
+  return :: a -> m a
+  (>>=)  :: m a -> (a -> m b) -> m b
+  (>>)   :: m a -> m b -> m b
+  m >> n = m >>= \_ -> n
+
+  fail   :: String -> m a
+
+class Applicative m => Monad' m where
+  (>>=) :: m a -> (a -> m b) -> m b
+
+newtype Identity a = Identity { runIdentity :: a }
+
+instance Monad Identity where
+  return a = Identity a
+  m >>= k = k (runIdentity m)
